@@ -5,11 +5,13 @@ namespace App\Domains\Home\Web\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class HomeController extends Controller
 {
-    public function index(): View|RedirectResponse
+    public function index(): Response
     {
-        return view('home.index');
+        return Inertia::render('dsf');
     }
 }

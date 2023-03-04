@@ -79,6 +79,7 @@ const localInputClasses = computed({
         :disabled="disabled"
         :dusk="dusk"
         :placeholder="placeholder"
+        @input="$emit('update:modelValue', $event.target.value)"
         @focus="displayMaxLength = true" />
       <span v-if="maxlength && displayMaxLength" class="length absolute rounded text-xs dark:text-gray-100">
         {{ charactersLeft }}

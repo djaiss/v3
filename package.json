@@ -2,7 +2,10 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "pretest": "DB_CONNECTION=testing php artisan migrate:fresh",
+        "posttest": "vendor/bin/phpstan analyse && vendor/bin/psalm",
+        "test": "vendor/bin/phpunit"
     },
     "devDependencies": {
         "axios": "^1.1.2",
@@ -10,6 +13,7 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
+        "@heroicons/vue": "^2.0.16",
         "@inertiajs/vue3": "^1.0.2",
         "@tailwindcss/forms": "^0.5.3",
         "@tailwindcss/typography": "^0.5.9",

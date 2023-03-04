@@ -6,10 +6,5 @@
     <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden rounded-lg mb-4">
       <slot />
     </div>
-
-    <!-- language selector -->
-    <div class="text-sm mb-10">
-      <!-- language selector -->
-    </div>
   </div>
 </template>

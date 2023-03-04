@@ -1,5 +1,33 @@
 <script setup>
 import Guest from '@/Shared/Guest.vue';
+import InputLabel from '@/Shared/Forms/InputLabel.vue';
+import InputText from '@/Shared/Forms/InputText.vue';
+import Button from '@/Shared/Forms/Button.vue';
+import Link from '@/Shared/Forms/Link.vue';
+import Error from '@/Shared/Forms/Error.vue';
+
+import { ref } from 'vue';
+import { useForm } from '@inertiajs/vue3';
+
+const props = defineProps({
+  data: Array,
+  errors: Object,
+});
+
+const form = useForm({
+  email: 'admin@admin.com',
+  password: 'admin123',
+});
+
+const loadingState = ref(false);
+
+const submit = () => {
+  loadingState.value = 'loading';
+
+  form.post(props.data.url.store, {
+    onError: () => loadingState.value = false,
+  })
+};
 </script>
 
 <template>
@@ -8,43 +36,37 @@ import Guest from '@/Shared/Guest.vue';
 
     <h2 class="font-bold text-center mb-2">Welcome back to OfficeLife</h2>
     <p class="mb-4 text-center">
-      <x-link :route="route('register')">Don't have an account?</x-link>
+      <Link :href="props.data.url.register">Don't have an account?</Link>
     </p>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('login.store') }}">
-      @csrf
-
-      <!-- Email Address -->
-      <div>
-        <x-input-label for="email" :value="__('Email')" />
-        <x-text-input id="email" dusk="email-field" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-        <x-input-error :messages="('email')" class="mt-2" />
+    <form @submit.prevent="submit()">
+      <!-- Email adddress -->
+      <div class="mt-4">
+        <InputLabel id="email" :required="true">Email</InputLabel>
+        <InputText v-model="form.email" dusk="email-field" id="email" type="email" inputClass="block w-full" autocomplete="username" :required="true" />
+        <Error v-if="errors.email" class="mt-1">{{ errors.email }}</Error>
       </div>
 
       <!-- Password -->
       <div class="mt-4">
-        <x-input-label for="password" :value="__('Password')" />
-        <x-text-input id="password" dusk="password-field" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
-        <x-input-error :messages="('password')" class="mt-2" />
+        <InputLabel id="password" :required="true">Password</InputLabel>
+        <InputText v-model="form.password" dusk="password-field" id="password" type="password" inputClass="block w-full" autocomplete="new-password" :required="true" />
+        <Error v-if="errors.password">{{ errors.password }}</Error>
       </div>
 
       <!-- Remember Me -->
       <div class="block mt-4">
         <label for="remember_me" class="inline-flex items-center">
           <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-          <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
+          <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
         </label>
       </div>
 
+      <!-- actions -->
       <div class="flex items-center justify-between mt-4">
-        <x-link :route="route('password.request')">Forgot your password?</x-link>
+        <Link :href="props.data.url.login">Forgot your password?</Link>
 
-        <x-primary-button class="ml-3" dusk="submit-button">
-          {{ __('Log in') }}
-        </x-primary-button>
+        <Button primary :state="loadingState" dusk="login-button">Login</Button>
       </div>
     </form>
   </Guest>

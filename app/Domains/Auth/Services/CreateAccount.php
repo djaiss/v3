@@ -6,6 +6,7 @@ use App\Models\Employee;
 use App\Services\BaseService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class CreateAccount extends BaseService
 {
@@ -16,7 +17,8 @@ class CreateAccount extends BaseService
     {
         return [
             'email' => 'required|unique:employees,email|email|max:255',
-            'password' => 'required|min:6|max:60',
+            'password' => ['required', 'confirmed', Password::min(6)],
+            'password_confirmation' => 'required',
         ];
     }
 
